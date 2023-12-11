@@ -1,0 +1,194 @@
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 400px;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #importButton {
+            margin-top: 10px;
+            background-color: #2196f3;
+        }
+
+        #importButton:hover {
+            background-color: #0b7dda;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+    <title>Form Options</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Form Options</h1>
+
+        <select id="formSelector">
+            <option value="satisfaction">Satisfaction Survey</option>
+            <option value="feedback">Feedback Form</option>
+            <option value="registration">User Registration</option>
+        </select>
+
+        <div id="formContainer"></div>
+
+        <button id="submitButton" type="submit">Submit</button>
+        <button id="importButton" onclick="importData()">Import Data</button>
+    </div>
+
+    <script>
+         const formContainer = document.getElementById('formContainer');
+        const submitButton = document.getElementById('submitButton');
+        const importButton = document.getElementById('importButton');
+        const formSelector = document.getElementById('formSelector');
+
+        let currentForm = null;
+
+        function createForm(option) {
+            formContainer.innerHTML = '';
+
+            const form = document.createElement('form');
+            form.id = 'surveyForm';
+
+            switch (option) {
+                case 'satisfaction':
+                    form.innerHTML = `
+                        <h1>Satisfaction Survey</h1>
+                        
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                        
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                        
+                        <label for="rating">Rate your satisfaction:</label>
+                        <select id="rating" name="rating" required>
+                            <option value="5">5 stars</option>
+                            <option value="4">4 stars</option>
+                            <option value="3">3 stars</option>
+                            <option value="2">2 stars</option>
+                            <option value="1">1 star</option>
+                        </select>`;
+                    break;
+
+                case 'feedback':
+                    form.innerHTML = `
+                        <h1>Feedback Form</h1>
+                        
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                        
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                        
+                        <label for="feedback">Feedback:</label>
+                        <textarea id="feedback" name="feedback" rows="4" required>`;
+                    break;
+
+                case 'registration':
+                    form.innerHTML = `
+                        <h1>User Registration</h1>
+                        
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                        
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                        
+                        <label for="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>`;
+                    break;
+            }
+
+            formContainer.appendChild(form);
+            currentForm = form;
+        }
+
+        formSelector.addEventListener('change', function () {
+            createForm(formSelector.value);
+        });
+
+        submitButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            submitForm();
+        });
+
+        function submitForm() {
+            if (currentForm) {
+                const formData = new FormData(currentForm);
+                const data = {};
+                formData.forEach((value, key) => {
+                    data[key] = value;
+                });
+                console.log('Submitted Data:', data);
+                alert('Form Submitted! Check the console for details.');
+            }
+        }
+
+        function importData() {
+            const importedData = {
+                name: 'John Doe',
+                email: 'john@example.com',
+                rating: '4'
+            };
+            
+            if (currentForm) {
+                for (const key in importedData) {
+                    const input = currentForm.querySelector(`[name="${key}"]`);
+                    if (input) {
+                        input.value = importedData[key];
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
